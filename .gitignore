@@ -1,3 +1,9 @@
+# Project
+input/*
+local/map_digits_to_words_v2.perl
+output/*
+raw/*
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
