@@ -1,8 +1,12 @@
 # Project
 input/*
+!input/.gitkeep
 local/map_digits_to_words_v2.perl
 output/*
+!output/.gitkeep
 raw/*
+!raw/.gitkeep
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

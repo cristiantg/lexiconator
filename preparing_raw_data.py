@@ -1,22 +1,27 @@
+#!/usr/bin/env python3
+
 # Prepare a single text file with one word in each line from 
 # x raw text files in a specific folder
 # @author Cristian TG
 # @since 2021/04/02
 
 RAW_DATA_FOLDER = "raw"
-FINAL_INPUT_FILE = "input/wordlist"
+FINAL_INPUT_FOLDER = "input/"
+FINAL_INPUT_FILE = FINAL_INPUT_FOLDER+"wordlist"
 
 
 ###############################################################
 ###############################################################
-from os import listdir
-from os import sep
-from os.path import isfile, join
-onlyfiles = [f for f in listdir(RAW_DATA_FOLDER) if isfile(join(RAW_DATA_FOLDER, f))]
+import os
+if not os.path.exists(FINAL_INPUT_FOLDER):
+    os.makedirs(FINAL_INPUT_FOLDER)
+
+onlyfiles = [f for f in os.listdir(
+    RAW_DATA_FOLDER) if os.path.isfile(os.path.join(RAW_DATA_FOLDER, f))]
 
 wordlist = set()
 for m_file in onlyfiles:
-    with open(RAW_DATA_FOLDER+sep+m_file) as f:
+    with open(RAW_DATA_FOLDER+os.sep+m_file) as f:
         for line in f:    
             for m_word in line.split():
                 wordlist.add(m_word)

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # Main script
 # Dependencies: CLAM (lm on Ponyland)
 # Feel free to change the constants' values in: uber_script.py, local/prepare_lexicon.py and local/join_files.py
