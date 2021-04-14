@@ -33,9 +33,9 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 
 **PART 2: Obtaining the lexicon file**
 1. Make sure you have set the values of the *Mandatory* variables of the scripts.
-1. (On Ponyland): Enter in one of the [servers](https://ponyland.science.ru.nl/doku.php?id=wiki:ponyland:about): `ssh rarity`
+1. (On Ponyland): Log into one of the [servers](https://ponyland.science.ru.nl/doku.php?id=wiki:ponyland:about): `ssh rarity`
 1. Activate your LaMachine: `lm` or `lamachine-lacristianmachine-activate` (replace `lacristianmachine` for the name of your LaMachine).
-1. Run `python3 ubser_script.py`
+1. Run `python3 uber_script.py`
 
 
 ## 3. Results
