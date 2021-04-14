@@ -18,7 +18,7 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 *Optional*: `PREVIOUS_WORDS_FILE`, `need_to_clean`, `DIGITS_TO_WORDS_FILE_PATH` (.perl file not included in this repo. due to copyright, please contact me to access this file. You could also delete its use in the code).
 
 1. `local/join_files.py`:
-*Mandatory*: `HEADER`
+*Mandatory*: `HEADER`, `INCLUDE_DISAMBIGUATION_SYMBOLS`
 *Optional*: `FINAL_FOLDER`, `LEXICON_FILE`, `AUX_LEXICON_FILE`, `LOG_FILE`
 
 

@@ -8,14 +8,16 @@ FINAL_INPUT_FILE = 'input/wordlist'
 # Words that will not be included in the final lexicon file. Could be empty
 PREVIOUS_WORDS_FILE = ''  # words.txt
 
-# Be careful, if you need to clean your date you need the map_digits_to_words_v2.perl file
-# Not included in this repo. due to copyright issues.
-need_to_clean=False
-DIGITS_TO_WORDS_FILE_PATH = 'local/map_digits_to_words_v2.perl'
+# Delete diacritics and other symbols
+need_to_clean=True
 if need_to_clean:
-    print("<clean> mode activated")
+    print("\t<clean> mode activated")
 else:
-    print("<clean> mode is not activated")
+    print("\t<clean> mode is not activated")
+# OPTIONAL
+# Be careful, if you want map down digits you need the map_digits_to_words_v2.perl file
+# Not included in this repo. due to copyright issues.
+DIGITS_TO_WORDS_FILE_PATH = 'local/map_digits_to_words_v2.perl'
 
 OUTPUT_FILE_FOLDER = sys.argv[1]
 OUTPUT_FILE_NAME = 'dict-words'
@@ -34,17 +36,21 @@ if (len(sys.argv) < 2):
 REPLACE_SYMBOLS = {"\n": "", ";": "",
                    "(": "", ")": "", "-": " ", "’": "", "'": "", ".": ""}
 REPLACE_WORDS = {",": "", "/": ""}
-NORMALIZE_SYMBOLS = {"Ä": "A", "Ë": "E", "Ï": "I", "Ö": "O", "Ü": "U", "Á": "A", "É": "E", "Í": "I", "Ó": "O", "Ú": "U",
-                     "À": "A", "È": "E", "Ì": "I", "Ò": "O", "Ù": "U"}
+NORMALIZE_SYMBOLS = {"Ä": "A", "Ë": "E", "Ï": "I", "Ö": "O", "Ü": "U", "Á": "A", "É": "E",
+ "Í": "I", "Ó": "O", "Ú": "U", "À": "A", "È": "E", "Ì": "I", "Ò": "O", "Ù": "U", "ä": "a", 
+ "ë": "e", "ï": "i", "ö": "o", "ü": "u", "á": "a", "é": "e", "í": "i", "ó": "o", "ú": "u",
+  "à": "a", "è": "e", "ì": "i", "ò": "o", "ù": "u"}
 TEMPORAL_FILE = "tmp"
 
 
 def clean_text(originalText):
     for symbol in REPLACE_SYMBOLS:
         originalText = originalText.replace(symbol, REPLACE_SYMBOLS[symbol])
-    os.system("echo \"" + originalText + "\"| perl " +
-              DIGITS_TO_WORDS_FILE_PATH + " > tmp")
-    return str(open(TEMPORAL_FILE, 'r').read()).replace('\n', '')
+    if os.path.isfile(DIGITS_TO_WORDS_FILE_PATH):
+        os.system(("echo \"" + originalText + "\"| perl " +
+                  DIGITS_TO_WORDS_FILE_PATH + " > "+TEMPORAL_FILE))
+        originalText = str(open(TEMPORAL_FILE, 'r').read())
+    return originalText.replace('\n', '')
 
 
 def clean_word(originalWord):
@@ -69,7 +75,7 @@ if len(PREVIOUS_WORDS_FILE)>1:
     print("-> ", len(not_include), "unique words in the <not_include> list")
 
 
-print("Obtaining all words from source text...")
+print("Obtaining/cleaning all words from the source text file...")
 words = set([])
 cont = 0
 f = open(FINAL_INPUT_FILE, 'r', encoding='utf8')
@@ -87,7 +93,6 @@ for line in f:
             words.add(word)
         cont+=1
 f.close()
-print()
 print()
 print("-> ", len(words), "unique words")
 words = sorted(words)
@@ -110,4 +115,5 @@ for l in my_lists:
             f.write('\n')
 
 if need_to_clean:
-    os.remove(TEMPORAL_FILE)
+    if os.path.isfile(TEMPORAL_FILE):
+        os.remove(TEMPORAL_FILE)

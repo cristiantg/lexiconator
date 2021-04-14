@@ -1,6 +1,13 @@
 #!/usr/bin/env python3
 
-# Main script
+# Main script.
+# This script provides a lexicon file with the following sintax
+# <word><tab-symbol><phonetic-transcription> in each line.
+# Please run preparing_raw_data.py before to create a suitable
+# input file.
+# Also please take into accoutn this script outputs entries with
+# disambiguation symbols (fast, Kaldi) on duplicate pronunciation
+# entries
 # Dependencies: CLAM (lm on Ponyland)
 # Feel free to change the constants' values in: uber_script.py, local/prepare_lexicon.py and local/join_files.py
 # @author Cristian TG
