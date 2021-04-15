@@ -5,6 +5,7 @@
 # @author Cristian TG
 # @since 2021/04/02
 
+# Please change the value of these variables:
 RAW_DATA_FOLDER = "raw"
 FINAL_INPUT_FOLDER = "input/"
 FINAL_INPUT_FILE = FINAL_INPUT_FOLDER+"wordlist"

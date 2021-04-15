@@ -6,6 +6,7 @@ output/*
 !output/.gitkeep
 raw/*
 !raw/.gitkeep
+compare/*
 
 
 # Byte-compiled / optimized / DLL files

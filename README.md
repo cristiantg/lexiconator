@@ -5,16 +5,16 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 
 
 ## 1. Prepare input data and values of variables
-1. The `preparing_raw_data.py` script will extract all words possible from specific text files. You just need to put as many text files as you want under one folder: `preparing_raw_data.py#RAW_DATA_FOLDER`.
+1. The `utils/preparing_raw_data.py` script will extract all words possible from specific text files. You just need to put as many text files as you want under one folder: `utils/preparing_raw_data.py#RAW_DATA_FOLDER`.
  
-1. The generated file `preparing_raw_data.py#FINAL_INPUT_FILE` in `preparing_raw_data.py#FINAL_INPUT_FOLDER` will be used as input for the next step.
+1. The generated file `utils/preparing_raw_data.py#FINAL_INPUT_FILE` in `utils/preparing_raw_data.py#FINAL_INPUT_FOLDER` will be used as input for the next step.
 
 1.  `uber_script.py`:
 *Mandatory*: `WEBSERVICES_USERNAME`, `WEBSERVICES_PASSWORD`
 *Optional*: `OUTPUT_FOLDER`, `AUX_FOLDER`, `DICT_FOLDER`
 
 1.  `local/prepare_lexicon.py`:
-*Mandatory*: `FINAL_INPUT_FILE` (must be the same as `preparing_raw_data.py#FINAL_INPUT_FILE`)
+*Mandatory*: `FINAL_INPUT_FILE` (must be the same as `utils/preparing_raw_data.py#FINAL_INPUT_FILE`)
 *Optional*: `PREVIOUS_WORDS_FILE`, `need_to_clean`, `DIGITS_TO_WORDS_FILE_PATH` (.perl file not included in this repo. due to copyright, please contact me to access this file. You could also delete its use in the code).
 
 1. `local/join_files.py`:
@@ -28,8 +28,8 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 
 ## 2. How to run this project
 **PART 1: Preparing raw data as input**
-1. Put your text files into the path: `preparing_raw_data.py#RAW_DATA_FOLDER`
-1. Run `python3 preparing_raw_data.py`
+1. Put your text files into the path: `utils/preparing_raw_data.py#RAW_DATA_FOLDER`
+1. Run `python3 utils/preparing_raw_data.py`
 
 **PART 2: Obtaining the lexicon file**
 1. Make sure you have set the values of the *Mandatory* variables of the scripts.
@@ -42,6 +42,12 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 The final lexicon file will be under the path set in the variable: `local/join_files.py#FINAL_FOLDER`
 
 
-## 4. Contact
+## 4. Extra utilities
+You can use the `utils/extracting_words.py` script to obtain all words from files in a folder (without digits) and specifying the word separator in those files.
+
+You can also use the `utils/comparing_lexicons.py` script to compare two lexicon files (Kaldi format) in terms of words, characters and phones.
+
+
+## 5. Contact
 Cristian Tejedor-García
 Email: cristian [dot] tejedorgarcia [at] ru [dot] nl
