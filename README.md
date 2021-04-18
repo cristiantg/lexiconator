@@ -11,7 +11,7 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 
 1.  `uber_script.py`:
 *Mandatory*: `WEBSERVICES_USERNAME`, `WEBSERVICES_PASSWORD`
-*Optional*: `OUTPUT_FOLDER`, `AUX_FOLDER`, `DICT_FOLDER`
+*Optional*: `OUTPUT_FOLDER`, `AUX_FOLDER`, `DICT_FOLDER`, `RAW_DATA_FOLDER`, `RAW_OUTPUT_FOLDER`
 
 1.  `local/prepare_lexicon.py`:
 *Mandatory*: `FINAL_INPUT_FILE` (must be the same as `utils/preparing_raw_data.py#FINAL_INPUT_FILE`)

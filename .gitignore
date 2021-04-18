@@ -7,6 +7,8 @@ output/*
 raw/*
 !raw/.gitkeep
 compare/*
+raw_input/*
+!raw_input/.gitkeep
 
 
 # Byte-compiled / optimized / DLL files

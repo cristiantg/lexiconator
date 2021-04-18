@@ -5,8 +5,13 @@
 # @author Cristian TG
 # @since 2021/04/02
 
+import sys
+if (len(sys.argv) < 2):
+    print("You should add one argument: a folder path for obtaining the raw word files.")
+    sys.exit(-1)
+
 # Please change the value of these variables:
-RAW_DATA_FOLDER = "raw"
+RAW_DATA_FOLDER = sys.argv[1]
 FINAL_INPUT_FOLDER = "input/"
 FINAL_INPUT_FILE = FINAL_INPUT_FOLDER+"wordlist"
 

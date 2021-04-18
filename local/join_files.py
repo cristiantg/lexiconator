@@ -6,7 +6,7 @@ import os
 import sys
 
 if (len(sys.argv) < 3):
-    print("You should add two arguments: a folder path for retrieving the server data and the output folder")
+    print("You should add two arguments: a folder path for retrieving the server data and the output folder for the lexicon")
     sys.exit(-1)
 
 # Personalize the first lines of the final lexicon file
@@ -17,7 +17,7 @@ INCLUDE_DISAMBIGUATION_SYMBOLS = True
 
 
 
-FINAL_FOLDER = sys.argv[2]+'final/'
+FINAL_FOLDER = sys.argv[2]
 if not os.path.exists(FINAL_FOLDER):
     os.makedirs(FINAL_FOLDER)
 AUX_LEXICON_FILE = FINAL_FOLDER+'lexiconordered.pron'
@@ -92,7 +92,6 @@ with open(LEXICON_FILE, 'w') as w:
 
 if INCLUDE_DISAMBIGUATION_SYMBOLS and (max_disambig_index > DISAMBIG_DEFAULT_INDEX):
     with open(DISAMBIG_FILE, 'w') as w:
-        print("\n-> Disambiguation symbols included in the file", DISAMBIG_FILE)
         for i in range(DISAMBIG_DEFAULT_INDEX,max_disambig_index+1):
             w.write(DISAMBIGUATION_SYMBOL+str(i)+'\n')
 
@@ -114,12 +113,15 @@ with open(LOG_FILE, 'w') as w:
     for i in pron_not_found:
         w.write(i)
 
-print("\n-> The lexicon file is in:", LEXICON_FILE)
-print(str(len(all_words)), "words in the final lexicon file.")
+    w.write("\n-> Disambiguation symbols included in the file "+ DISAMBIG_FILE)
+    w.write("\n-> The lexicon file is in: "+LEXICON_FILE)
+    w.write("\n"+str(len(all_words)) + " words in the final lexicon file.")
 
-print("\n-> The log file is in:", LOG_FILE)
-if INCLUDE_DISAMBIGUATION_SYMBOLS:
-    print("\t- Entries with disambiguation symbols: "+str(len(n_disambig_lines)))
-print("\t- Discarded words:")
-print("\t\t"+str(len(duplicates)), "duplicated words.")
-print("\t\t"+str(len(pron_not_found)), "words with no pronunciation.\n")
+    if INCLUDE_DISAMBIGUATION_SYMBOLS:
+        w.write("\n\t- Entries with disambiguation symbols: " +
+                str(len(n_disambig_lines))+"\n")
+    w.write("\t- Discarded words:\n")
+    w.write("\t\t"+str(len(duplicates)) + " duplicated words.\n")
+    w.write("\t\t"+str(len(pron_not_found)) + " words with no pronunciation.\n")
+
+print("-> The log file is in: ", LOG_FILE, "\n")
