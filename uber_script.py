@@ -20,26 +20,31 @@ WEBSERVICES_USERNAME = "CHANGE_VALUE"
 WEBSERVICES_PASSWORD = "CHANGE_VALUE"
 
 # ---------------- OPTION = 1 ----------------
+# Just one execution (one folder)
 # Just one output lexicon = 1
 SUFFIX_OUTPUT_FOLDER = "results"
 OPTION = 1
 
 
 # ---------------- OPTION = 2 ----------------
+# N executions (n folders)
 # N lexicons, lexicon = 2
+
+# Change these values if you set lexicon = 2:
 # Raw input files folder (all of them to be iterated one by one)
 RAW_DATA_FOLDER = "raw_input"
 # Raw input file folder (just one of them)
 RAW_OUTPUT_FOLDER = "raw"
 
 
-
+# ---------------- ANY OPTION ----------------
 # name+/ Autogenerate files in this folder (you should remove them manually after running this script)
 OUTPUT_FOLDER = 'output/'
 # name+/ Autogenerate files in this folder
 AUX_FOLDER = OUTPUT_FOLDER+'aux/'
 # name+/ Autogenerate files in this folder 
 DICT_FOLDER = OUTPUT_FOLDER+'dict/'
+
 
 
 #########################################################

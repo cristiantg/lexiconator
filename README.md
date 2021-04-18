@@ -10,8 +10,8 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 1. The generated file `utils/preparing_raw_data.py#FINAL_INPUT_FILE` in `utils/preparing_raw_data.py#FINAL_INPUT_FOLDER` will be used as input for the next step.
 
 1.  `uber_script.py`:
-*Mandatory*: `WEBSERVICES_USERNAME`, `WEBSERVICES_PASSWORD`
-*Optional*: `OUTPUT_FOLDER`, `AUX_FOLDER`, `DICT_FOLDER`, `RAW_DATA_FOLDER`, `RAW_OUTPUT_FOLDER`
+*Mandatory*: `WEBSERVICES_USERNAME`, `WEBSERVICES_PASSWORD`, `OPTION`,
+*Optional*: `OUTPUT_FOLDER`, `AUX_FOLDER`, `DICT_FOLDER`, `SUFFIX_OUTPUT_FOLDER`, `RAW_DATA_FOLDER`, `RAW_OUTPUT_FOLDER`
 
 1.  `local/prepare_lexicon.py`:
 *Mandatory*: `FINAL_INPUT_FILE` (must be the same as `utils/preparing_raw_data.py#FINAL_INPUT_FILE`)
@@ -32,7 +32,7 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 1. Run `python3 utils/preparing_raw_data.py`
 
 **PART 2: Obtaining the lexicon file**
-1. Make sure you have set the values of the *Mandatory* variables of the scripts.
+1. Make sure you have set the values of the *Mandatory* variables of the scripts. Also set `OPTION=1` on `uber_script.py`
 1. (On Ponyland): Log into one of the [servers](https://ponyland.science.ru.nl/doku.php?id=wiki:ponyland:about): `ssh rarity`
 1. Activate your LaMachine: `lm` or `lamachine-lacristianmachine-activate` (replace `lacristianmachine` for the name of your LaMachine).
 1. Run `python3 uber_script.py`
@@ -43,9 +43,11 @@ The final lexicon file will be under the path set in the variable: `local/join_f
 
 
 ## 4. Extra utilities
-You can use the `utils/extracting_words.py` script to obtain all words from files in a folder (without digits) and specifying the word separator in those files.
+1. You can use the `utils/extracting_words.py` script to obtain all words from files in a folder (without digits) and specifying the word separator in those files.
 
-You can also use the `utils/comparing_lexicons.py` script to compare two lexicon files (Kaldi format) in terms of words, characters and phones.
+1. You can also use the `utils/comparing_lexicons.py` script to compare two lexicon files (Kaldi format) in terms of words, characters and phones.
+
+1. You can also use the `utils/extract_ortho.py` script to obtain the orthographical transcription of the lexicon files.
 
 
 ## 5. Contact
