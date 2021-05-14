@@ -13,7 +13,7 @@ if (len(sys.argv) < 3):
 #HEADER = "!SIL\tsil\n<UNK>\tspn\n" # HoMed
 HEADER = "<unk>\tunk\n" # JASMIN
 # Change this value if you do not want to include disambiguation symbols (Kaldi)
-INCLUDE_DISAMBIGUATION_SYMBOLS = True
+INCLUDE_DISAMBIGUATION_SYMBOLS = False
 
 
 
