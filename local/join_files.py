@@ -5,8 +5,8 @@ import glob
 import os
 import sys
 
-if (len(sys.argv) < 3):
-    print("You should add two arguments: a folder path for retrieving the server data and the output folder for the lexicon")
+if (len(sys.argv) < 4):
+    print("You should add three arguments: a folder path for retrieving the server data, the output folder for the lexicon and a path for the mapping file")
     sys.exit(-1)
 
 # Personalize the first lines of the final lexicon file
@@ -16,10 +16,8 @@ HEADER = "<unk>\tunk\n" # JASMIN
 INCLUDE_DISAMBIGUATION_SYMBOLS = False
 
 
-
+MAPPING_FILE_PATH = sys.argv[3]
 FINAL_FOLDER = sys.argv[2]
-if not os.path.exists(FINAL_FOLDER):
-    os.makedirs(FINAL_FOLDER)
 AUX_LEXICON_FILE = FINAL_FOLDER+'lexiconordered.pron'
 LEXICON_FILE = FINAL_FOLDER+'lexicon.txt'
 LOG_FILE = FINAL_FOLDER+'log.txt'
@@ -43,6 +41,14 @@ with open(AUX_LEXICON_FILE, 'wb') as outfile:
         with open(filename, 'rb') as readfile:
             shutil.copyfileobj(readfile, outfile)
 
+
+mapping_words = {}
+with open(MAPPING_FILE_PATH, 'r') as m_f:
+    for line in m_f:
+        if len(line)>0:
+            aux = line.replace('\n','').split('\t')
+            mapping_words[aux[0]] = aux[1]
+print("-> The mapping file is in: ", MAPPING_FILE_PATH)
 
 duplicates = []
 pron_duplicates = {}
@@ -69,7 +75,7 @@ with open(AUX_LEXICON_FILE, 'r') as r:
                 else:
                     all_prons.add(m_pron)
                     pron_duplicates[m_pron] = 1
-                lexicon[m_word] = [m_pron, int(pron_duplicates[m_pron])]
+                lexicon[m_word if m_word not in mapping_words else mapping_words[m_word]] = [m_pron, int(pron_duplicates[m_pron])]
         else:
             pron_not_found.append(line.replace(
                 "PRONUNCIATION_NOT_FOUND", ""))
@@ -102,6 +108,12 @@ with open(LOG_FILE, 'w') as w:
     for i in duplicates:
         w.write(i+"\n")
     
+    w.write("\n---- Words with digits (mapping file): " +
+            str(len(mapping_words))+"\n")
+        
+    for i in sorted(mapping_words):
+        w.write(mapping_words[i]+" "+i+"\n")
+
     if INCLUDE_DISAMBIGUATION_SYMBOLS:
         w.write("---- Disambiguation symbols included in: " +
                 str(len(n_disambig_lines))+" entries:\n")
@@ -113,14 +125,15 @@ with open(LOG_FILE, 'w') as w:
     for i in pron_not_found:
         w.write(i)
 
-    w.write("\n-> Disambiguation symbols included in the file "+ DISAMBIG_FILE)
+    if INCLUDE_DISAMBIGUATION_SYMBOLS:
+        w.write("\n-> Disambiguation symbols included in the file "+ DISAMBIG_FILE)
     w.write("\n-> The lexicon file is in: "+LEXICON_FILE)
     w.write("\n"+str(len(all_words)) + " words in the final lexicon file.")
 
     if INCLUDE_DISAMBIGUATION_SYMBOLS:
         w.write("\n\t- Entries with disambiguation symbols: " +
                 str(len(n_disambig_lines))+"\n")
-    w.write("\t- Discarded words:\n")
+    w.write("\n\t- Discarded words:\n")
     w.write("\t\t"+str(len(duplicates)) + " duplicated words.\n")
     w.write("\t\t"+str(len(pron_not_found)) + " words with no pronunciation.\n")
 

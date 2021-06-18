@@ -22,7 +22,7 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 *Optional*: `FINAL_FOLDER`, `LEXICON_FILE`, `AUX_LEXICON_FILE`, `LOG_FILE`
 
 
-**Important**: phonetic transcription of numbers are not supported by the current G2P service. You may (a) use their orthographical word representation with the .perl script `local/prepare_lexicon.py#DIGITS_TO_WORDS_FILE_PATH` and `local/prepare_lexicon.py#need_to_clean=True`, (b) do it by yourself or (c) just ignore them.
+**Important**: phonetic transcription of numbers are not supported by the current G2P service. You may (a) use their orthographical word representation with a .perl script `local/prepare_lexicon.py#DIGITS_TO_WORDS_FILE_PATH` and `local/prepare_lexicon.py#need_to_clean=True`, (b) do it by yourself or (c) just ignore them.
 
 
 
@@ -43,7 +43,7 @@ The final lexicon file will be under the path set in the variable: `local/join_f
 
 
 ## 4. Extra utilities
-1. You can use the `utils/extracting_words.py` script to obtain all words from files in a folder (without digits) and specifying the word separator in those files.
+1. You can use the `utils/extracting_words.py` script to obtain all words from files in a folder (with or without digits) and specifying the word separator in those files.
 
 1. You can also use the `utils/comparing_lexicons.py` script to compare two lexicon files (Kaldi format) in terms of words, characters and phones.
 

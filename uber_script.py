@@ -16,7 +16,7 @@
 import os
 import shutil
 
-WEBSERVICES_USERNAME = "CHANGE_VALUE"
+WEBSERVICES_USERNAME = "CHANGE_VALUE" 
 WEBSERVICES_PASSWORD = "CHANGE_VALUE"
 
 # ---------------- OPTION = 1 ----------------
@@ -52,6 +52,11 @@ DICT_FOLDER = OUTPUT_FOLDER+'dict/'
 def main_loop(m_file, aux_file):
   # name+/ Autogenerate files in this folder
   FINAL_FOLDER = OUTPUT_FOLDER+m_file+'-final/'
+  if not os.path.exists(FINAL_FOLDER):
+    os.makedirs(FINAL_FOLDER)
+  # name+/ Autogenerate files in this folder 
+  MAPPING_FILE_PATH = FINAL_FOLDER+'mapping.txt'
+  open(MAPPING_FILE_PATH, 'w').close()
 
   if not os.path.exists(OUTPUT_FOLDER):
     os.makedirs(OUTPUT_FOLDER)
@@ -66,15 +71,14 @@ def main_loop(m_file, aux_file):
   else:
     os.system('rm -r ' + DICT_FOLDER + '*')
 
-
-  print('######## 1/3 ######### python3 local/prepare_lexicon.py', AUX_FOLDER)
-  os.system('python3 local/prepare_lexicon.py '+AUX_FOLDER)
+  print('######## 1/3 ######### python3 local/prepare_lexicon.py', AUX_FOLDER, MAPPING_FILE_PATH)
+  os.system('python3 local/prepare_lexicon.py '+AUX_FOLDER + ' ' + MAPPING_FILE_PATH)
 
   print('######## 2/3 ######### python3 local/g2p_ws.py', WEBSERVICES_USERNAME, "*PASSWORD*", AUX_FOLDER, DICT_FOLDER)
   os.system('python3 local/g2p_ws.py ' + WEBSERVICES_USERNAME + ' ' + WEBSERVICES_PASSWORD + ' ' + AUX_FOLDER + ' ' + DICT_FOLDER)
 
-  print('######## 3/3 ######### python3 local/join_files.py', DICT_FOLDER, FINAL_FOLDER)
-  os.system('python3 local/join_files.py '+DICT_FOLDER + ' ' + FINAL_FOLDER)
+  print('######## 3/3 ######### python3 local/join_files.py', DICT_FOLDER, FINAL_FOLDER, MAPPING_FILE_PATH)
+  os.system('python3 local/join_files.py '+DICT_FOLDER + ' ' + FINAL_FOLDER + ' ' + MAPPING_FILE_PATH)
 
   if os.path.exists(aux_file):
     os.remove(aux_file)

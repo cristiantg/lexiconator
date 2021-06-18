@@ -13,6 +13,7 @@ RAW_DATA_REPLACEMENTS = {"<": " ", ">": " ", "\t": " ", "$": " ", "=\"":" "}
 FINAL_INPUT_FOLDER = "raw_input/"
 EXTENSION_TO_EXTRACT = ".txt"
 EXTENSION_OUTPUT = ""
+KEEP_DIGITS = True
 
 FINAL_INPUT_FILE = FINAL_INPUT_FOLDER+"_"
 
@@ -32,7 +33,7 @@ for m_file in onlyfiles:
     currentFile = RAW_DATA_FOLDER+os.sep+m_file
     if currentFile.endswith(EXTENSION_TO_EXTRACT):
         count += 1
-        with open(currentFile) as f:
+        with open(currentFile) as f:            
             for line in f:
                 for key in RAW_DATA_REPLACEMENTS:
                     line = line.replace(key, RAW_DATA_REPLACEMENTS[key])
@@ -46,7 +47,8 @@ for m_file in onlyfiles:
         with open(finalName, "w") as f:
             for word in wordlist:
                 word = word.strip()
-                word = ''.join([i for i in word if not i.isdigit()])
+                if not KEEP_DIGITS:                    
+                    word = ''.join([i for i in word if not i.isdigit()])
                 if len(word)>0:
                     f.write(word+"\n")
         print("Created input file in "+finalName)

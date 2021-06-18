@@ -7,6 +7,8 @@ import sys
 FINAL_INPUT_FILE = 'input/wordlist'
 # Words that will not be included in the final lexicon file. Could be empty
 PREVIOUS_WORDS_FILE = ''  # words.txt
+# Minimoum lentgh of the final lexicon words 
+MIN_LENGTH_OUTPUT_WORDS = 1
 
 # Delete diacritics and other symbols
 need_to_clean=True
@@ -21,20 +23,20 @@ DIGITS_TO_WORDS_FILE_PATH = 'local/map_digits_to_words_v2.perl'
 
 OUTPUT_FILE_FOLDER = sys.argv[1]
 OUTPUT_FILE_NAME = 'dict-words'
+MAPPING_FILE_PATH = sys.argv[2]
 
 
-if (len(sys.argv) < 2):
-    print("You should add one argument: a folder path for auxiliary files.")
+if (len(sys.argv) < 3):
+    print("You should add two arguments: a folder path for auxiliary files and a path for the mapping file.")
     sys.exit(-1)
-
-
 
 
 
 ########################################################################################
 ########################################################################################
 # You can add/remove as many symbols as you want:
-REPLACE_SYMBOLS = {"-": " ", "'": "",
+##### "-": " " --> Special case, do not incude it here
+REPLACE_SYMBOLS = {"'": "",
                     "\"": "", "\n": "", ";": "",
                    "(": "", ")": "",   ".": "", ":": "", "_": "",
                    "%": "", "•": "", "‘": "", "’": "", "–": "", "[": "", "]": "", 
@@ -50,14 +52,19 @@ NORMALIZE_SYMBOLS = {"Ä": "A", "Ë": "E", "Ï": "I", "Ö": "O", "Ü": "U", "Á"
 TEMPORAL_FILE = "tmp"
 
 
+def map_digits(digits):
+    m_text = digits    
+    if os.path.isfile(DIGITS_TO_WORDS_FILE_PATH):
+        os.system(("echo \"" + m_text + "\"| perl " +
+                  DIGITS_TO_WORDS_FILE_PATH + " > "+TEMPORAL_FILE))
+        m_text = str(open(TEMPORAL_FILE, 'r').read()).replace('\n', '')
+    return m_text
+    
+
 def clean_text(originalText):
     for symbol in REPLACE_SYMBOLS:
         originalText = originalText.replace(symbol, REPLACE_SYMBOLS[symbol])
-    if os.path.isfile(DIGITS_TO_WORDS_FILE_PATH):
-        os.system(("echo \"" + originalText + "\"| perl " +
-                  DIGITS_TO_WORDS_FILE_PATH + " > "+TEMPORAL_FILE))
-        originalText = str(open(TEMPORAL_FILE, 'r').read())
-    return originalText.replace('\n', '')
+    return originalText
 
 
 def clean_word(originalWord):
@@ -65,11 +72,13 @@ def clean_word(originalWord):
         originalWord = originalWord.replace(symbol, REPLACE_WORDS[symbol])
     return originalWord
 
-
+## Symbols and numbers
+##
 def normalizeText(originalText):
     for symbol in NORMALIZE_SYMBOLS:
         originalText = originalText.replace(symbol, NORMALIZE_SYMBOLS[symbol])
-    return ''.join([i for i in originalText if not i.isdigit()])
+    return originalText
+    #return ''.join([i for i in originalText if not i.isdigit()])
 
 
 not_include = set([])
@@ -90,14 +99,45 @@ for line in f:
     if need_to_clean:
         line = clean_text(line)
     for word in line.split():
+        needs_mapping = False
         if need_to_clean:
             word = normalizeText(clean_word(word))
         if cont%2000==0:
             print(cont, end=' ', flush=True)
         if not (word.isupper()):
             word = word.lower()
-        if (len(word) > 0) and (word.upper() not in not_include):
-            words.add(word)
+        if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word.upper() not in not_include):
+            ## 1. Special case - (first and last char)
+            if word[0]=='-':
+                word = word[1:]
+            if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word[-1]=='-'):
+                word = word [0:-1]
+            # 2. Digits to orthographical transcription
+            m_len = len(word)
+            if m_len >= MIN_LENGTH_OUTPUT_WORDS:
+                current = 0
+                aux_word = ''
+                aux_char = ''
+                aux_digits = ''
+                while current < m_len:
+                    aux_char = word[current]
+                    if aux_char.isdigit():
+                        aux_digits+=str(aux_char)
+                    else:
+                        if len(aux_digits)>0:
+                            aux_word+=map_digits(aux_digits)
+                            needs_mapping = True
+                        aux_digits = ''
+                        aux_word+=aux_char
+                    current += 1
+                if len(aux_digits)>0:
+                    aux_word+=map_digits(aux_digits)
+                    aux_digits = ''
+                    needs_mapping = True
+                if needs_mapping:
+                    with open(MAPPING_FILE_PATH, 'a') as m_f:
+                        m_f.write(aux_word+'\t'+word+'\n')
+                words.add(aux_word)
         cont+=1
 f.close()
 print()
