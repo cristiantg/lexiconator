@@ -2,13 +2,13 @@
 
 # Extracts words from all texts in a folder
 # Input: UTF-8 files. Please make sure your files are in UTF-8.
-# Output: files with the words extracted from each file
+# Output: UTF-8 files with the words extracted from each file
 # @author Cristian TG
 # @since 2021/04/15
 
 # Please change the value of these variables:
 WORD_SEPARATOR = " "
-RAW_DATA_FOLDER = "raw/lexicons_2"
+RAW_DATA_FOLDER = "raw/light_v2"
 RAW_DATA_REPLACEMENTS = {"<": " ", ">": " ", "\t": " ", "$": " ", "=\"":" "}
 FINAL_INPUT_FOLDER = "raw_input/"
 EXTENSION_TO_EXTRACT = ".txt"

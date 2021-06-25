@@ -1,4 +1,3 @@
-
 # lexiconator
 Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of text files using the [G2P](https://webservices.cls.ru.nl/g2pservice/index/) webservice of CLST, Dutch CGN2 (under [CLAM](https://proycon.github.io/LaMachine/) environment and Python3).
 
@@ -15,7 +14,7 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 
 1.  `local/prepare_lexicon.py`:
 *Mandatory*: `FINAL_INPUT_FILE` (must be the same as `utils/preparing_raw_data.py#FINAL_INPUT_FILE`)
-*Optional*: `PREVIOUS_WORDS_FILE`, `need_to_clean`, `DIGITS_TO_WORDS_FILE_PATH` (.perl file not included in this repo. due to copyright, please contact me to access this file. You could also delete its use in the code).
+*Optional*: `EXCEPTION_TABLE`, `PREVIOUS_WORDS_FILE`, `need_to_clean`, `DIGITS_TO_WORDS_FILE_PATH` (.perl file not included in this repo. due to copyright, please contact me to access this file. You could also delete its use in the code).
 
 1. `local/join_files.py`:
 *Mandatory*: `HEADER`, `INCLUDE_DISAMBIGUATION_SYMBOLS`
