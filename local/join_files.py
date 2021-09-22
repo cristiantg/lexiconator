@@ -11,7 +11,8 @@ if (len(sys.argv) < 4):
 
 # Personalize the first lines of the final lexicon file
 #HEADER = "!SIL\tsil\n<UNK>\tspn\n"
-HEADER = "<unk>\tunk\n"
+HEADER = ''
+#"<unk>\tunk\n"
 # Change this value whether you want or not to include disambiguation symbols (Kaldi)
 INCLUDE_DISAMBIGUATION_SYMBOLS = False
 
@@ -60,7 +61,7 @@ with open(AUX_LEXICON_FILE, 'r') as r:
             m_aux = line.split(SEP_SYMBOL)
             m_word = str(m_aux[0])            
             m_pron = str(m_aux[1].replace('\n', ''))
-            
+                       
             aux_word = m_word.split(SEP_ISOLATED)
             _word_id = aux_word[-2]
             _subword_id = aux_word[-3]

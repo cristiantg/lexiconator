@@ -20,6 +20,7 @@ PREVIOUS_WORDS_FILE = ''  # words.txt
 MIN_LENGTH_OUTPUT_WORDS = 1
 # Delete diacritics and other symbols
 need_to_clean=True
+delete_diacritics=False
 print("\t<clean> mode activated" if need_to_clean else "\t<clean> mode is not activated")
 # OPTIONAL
 # Be careful, if you want map down digits you need the map_digits_to_words_v2.perl file
@@ -38,7 +39,8 @@ SEP_ISOLATED = '###'
 ########################################################################################
 # You can add/remove as many symbols as you want:
 ##### Dash "-": " " --> Special case, do not incude it here
-REPLACE_SYMBOLS = {"'": "", "\"": "", "\n": "", ";": "", "(": "", ")": "", 
+##### Quotes "'" " " --> Special case, do not incude it here
+REPLACE_SYMBOLS = {"\"": "", "\n": "", ";": "", "(": "", ")": "", 
                    ".": "", ":": "", "_": "",
                    "%": "", "•": "", "‘": "", "’": "", "–": "", "[": "", "]": "", 
                    "{": "", "}": "", "<": "", ">": "", "+": "", "=": "", "&": "", 
@@ -49,7 +51,9 @@ REPLACE_WORDS = {",": "", "/": ""}
 NORMALIZE_SYMBOLS = {"Ä": "A", "Ë": "E", "Ï": "I", "Ö": "O", "Ü": "U", "Á": "A", "É": "E",
  "Í": "I", "Ó": "O", "Ú": "U", "À": "A", "È": "E", "Ì": "I", "Ò": "O", "Ù": "U", "ä": "a", 
  "ë": "e", "ï": "i", "ö": "o", "ü": "u", "á": "a", "é": "e", "í": "i", "ó": "o", "ú": "u",
- "à": "a", "è": "e", "ì": "i", "ò": "o", "ù": "u", "å": "a", "Å": "A", "ê": "e", "Ê": "E"}
+ "à": "a", "è": "e", "ì": "i", "ò": "o", "ù": "u", "å": "a", "Å": "A", "ê": "e", "Ê": "E",
+ "â":"a", "ã":"a", "î":"i", "û":"u", "ý":"y", "ÿ":"y", "Â":"A", "Ã":"A", "Î":"I", "Û":"U", 
+ "Ý":"Y", "Ÿ":"Y"}
 TEMPORAL_FILE = "tmp"
 
 
@@ -113,7 +117,7 @@ for line in f:
         isolation_subword_count = 0
         needs_isolating = False
         aux_mapping = ''
-        if need_to_clean:
+        if delete_diacritics:
             word = normalizeText(clean_word(word))
         if cont%2000==0:
             print(cont, end=' ', flush=True)
