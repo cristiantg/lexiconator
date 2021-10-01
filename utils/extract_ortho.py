@@ -20,10 +20,10 @@ onlyfiles = [f for f in os.listdir(
 for m_file in onlyfiles:
     currentFile = LEXICON_FOLDER+os.sep+m_file
     words = []
-    with open(currentFile) as f:
+    with open(currentFile, encoding='utf-8') as f:
         for line in f:
             ortho = line.split("\t")[0]
             words.append(ortho)
-    with open(ORTHO_FOLDER+os.sep+m_file,"w") as w:
+    with open(ORTHO_FOLDER+os.sep+m_file,"w", encoding='utf-8') as w:
         for word in words:
             w.write(word+"\n")
