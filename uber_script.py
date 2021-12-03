@@ -32,17 +32,17 @@ import shutil
 
 WEBSERVICES_USERNAME = "CHANGE_VALUE" 
 WEBSERVICES_PASSWORD = "CHANGE_VALUE"
+OPTION = 1
 
 # ---------------- OPTION = 1 ----------------
 # Obtains a lexicon file
 # Just one execution (one folder)
 # Just one output lexicon = 1
 SUFFIX_OUTPUT_FOLDER = "results"
-OPTION = 1
 
 
 # ---------------- OPTION = 2 ----------------
-# Prepare a unique input file from a set of files on a directory
+# Prepares a unique input file from a set of files on a directory
 # It does not obtain a lexicon file.
 # N executions (n folders)
 # N lexicons, lexicon = 2

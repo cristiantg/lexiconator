@@ -16,16 +16,18 @@ EXCEPTION_TABLE = ''
 # Words that will not be included in the final lexicon file.
 # It could be empty
 PREVIOUS_WORDS_FILE = ''  # words.txt
-# Minimoum lentgh of the final lexicon words 
-MIN_LENGTH_OUTPUT_WORDS = 1
+# Minimum lentgh of the words of the final lexicon  
+MIN_LENGTH_OUTPUT_WORDS = 2
 # Delete diacritics and other symbols
 need_to_clean=True
 delete_diacritics=False
-print("\t<clean> mode activated" if need_to_clean else "\t<clean> mode is not activated")
 # OPTIONAL
 # Be careful, if you want map down digits you need the map_digits_to_words_v2.perl file
 # Not included in this repo. due to copyright issues.
 DIGITS_TO_WORDS_FILE_PATH = 'local/map_digits_to_words_v2.perl'
+
+print("\t<clean> mode activated" if need_to_clean else "\t<clean> mode is not activated")
+print("\t<diacritics> will be deleted" if delete_diacritics else "\t<diacritics> will not be deleted")
 
 
 
@@ -38,8 +40,8 @@ SEP_ISOLATED = '###'
 ########################################################################################
 ########################################################################################
 # You can add/remove as many symbols as you want:
-##### Dash "-": " " --> Special case, do not incude it here
-##### Quotes "'" " " --> Special case, do not incude it here
+# Do not include the symbols in DELETE_ONLY_BEGIN_END and in REPLACE_SYMBOLS
+DELETE_ONLY_BEGIN_END = ["-", "\'"]
 REPLACE_SYMBOLS = {"\"": "", "\n": "", ";": "", "(": "", ")": "", 
                    ".": "", ":": "", "_": "",
                    "%": "", "•": "", "‘": "", "’": "", "–": "", "[": "", "]": "", 
@@ -124,11 +126,12 @@ for line in f:
         if not (word.isupper()):
             word = word.lower()
         if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word.upper() not in not_include):
-            ## 1. Special case - (first and last char)
-            if word[0]=='-':
-                word = word[1:]
-            if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word[-1]=='-'):
-                word = word [0:-1]
+            ## 1. Special cases - (first and last char)
+            for be_symbol in DELETE_ONLY_BEGIN_END:
+                if word[0]==be_symbol:
+                    word = word[1:]
+                if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word[-1]==be_symbol):
+                    word = word [:-1]
 
             # 2. Avoiding possible duplicates  
             if word not in original_words:
