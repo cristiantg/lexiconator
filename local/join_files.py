@@ -9,6 +9,7 @@ if (len(sys.argv) < 4):
     print("You must add three arguments: a folder path for retrieving the server data, the output folder for the lexicon and a path for the mapping file.")
     sys.exit(-1)
 
+m_encode = 'utf-8'
 # Personalize the first lines of the final lexicon file
 #HEADER = "!SIL\tsil\n<UNK>\tspn\n"
 HEADER = ''
@@ -45,7 +46,7 @@ with open(AUX_LEXICON_FILE, 'wb') as outfile:
 
 
 mapping_words = {}
-with open(MAPPING_FILE_PATH, 'r') as m_f:
+with open(MAPPING_FILE_PATH, 'r', encoding=m_encode) as m_f:
     for line in m_f:
         if len(line)>0:
             aux = line.replace('\n','').split('\t')
@@ -55,7 +56,7 @@ with open(MAPPING_FILE_PATH, 'r') as m_f:
 # 1. obtain all subwords and words
 pron_not_found = []
 aux_lexicon_entries = {}
-with open(AUX_LEXICON_FILE, 'r') as r:
+with open(AUX_LEXICON_FILE, 'r', encoding=m_encode) as r:
     for line in sorted(r):
         if "PRONUNCIATION_NOT_FOUND" not in line:
             m_aux = line.split(SEP_SYMBOL)
@@ -110,7 +111,7 @@ for m_entry in isolated_words:
 # 4. Generating the final lexicon file
 n_disambig_lines = []
 max_disambig_index = DISAMBIG_DEFAULT_INDEX
-with open(LEXICON_FILE, 'w') as w:
+with open(LEXICON_FILE, 'w', encoding=m_encode) as w:
     w.write(HEADER)
     aux_line = ""
     for m_entry in sorted(lexicon):
@@ -125,7 +126,7 @@ with open(LEXICON_FILE, 'w') as w:
         w.write(aux_line + '\n')
 
 if INCLUDE_DISAMBIGUATION_SYMBOLS and (max_disambig_index > DISAMBIG_DEFAULT_INDEX):
-    with open(DISAMBIG_FILE, 'w') as w:
+    with open(DISAMBIG_FILE, 'w', encoding=m_encode) as w:
         for i in range(DISAMBIG_DEFAULT_INDEX,max_disambig_index+1):
             w.write(DISAMBIGUATION_SYMBOL+str(i)+'\n')
 
@@ -133,7 +134,7 @@ os.remove(AUX_LEXICON_FILE)
 
 
 ####################### 5. LOG
-with open(LOG_FILE, 'w') as w:
+with open(LOG_FILE, 'w', encoding=m_encode) as w:
     w.write("The lexicon file is on: "+LEXICON_FILE)
     w.write("\n"+str(len(all_words)) + " words in the final lexicon file.\n")  
     w.write("\n---- Duplicates avoided (orthographical transcription): " +

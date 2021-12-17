@@ -7,7 +7,7 @@ if (len(sys.argv) < 3):
     print("You must add two arguments: a folder path for generating auxiliary files and a path for the mapping file")
     sys.exit(-1)
 
-
+m_encode = 'utf-8'
 # Words file with one word in each line, to avoid repeating them in the new lexicon file generated
 FINAL_INPUT_FILE = 'input/wordlist'
 #Exception table overruling the output of the g2p. <word><tab><subword1><space><subwordn>. 
@@ -20,7 +20,7 @@ PREVIOUS_WORDS_FILE = ''  # words.txt
 MIN_LENGTH_OUTPUT_WORDS = 2
 # Delete diacritics and other symbols
 need_to_clean=True
-delete_diacritics=False
+delete_diacritics=True
 # OPTIONAL
 # Be careful, if you want map down digits you need the map_digits_to_words_v2.perl file
 # Not included in this repo. due to copyright issues.
@@ -64,7 +64,7 @@ def map_digits(digits):
     if os.path.isfile(DIGITS_TO_WORDS_FILE_PATH):
         os.system(("echo \"" + m_text + "\"| perl " +
                   DIGITS_TO_WORDS_FILE_PATH + " > "+TEMPORAL_FILE))
-        m_text = str(open(TEMPORAL_FILE, 'r').read()).replace('\n', '')
+        m_text = str(open(TEMPORAL_FILE, 'r', encoding=m_encode).read()).replace('\n', '')
     return m_text
     
 
@@ -88,7 +88,7 @@ def normalizeText(originalText):
 
 not_include = set([])
 if os.path.isfile(PREVIOUS_WORDS_FILE):
-    f = open(PREVIOUS_WORDS_FILE, 'r', encoding='utf8')
+    f = open(PREVIOUS_WORDS_FILE, 'r', encoding=m_encode)
     for line in f:
         for word in line.replace('\n','').split():
             not_include.add(word.upper())
@@ -98,7 +98,7 @@ if os.path.isfile(PREVIOUS_WORDS_FILE):
 
 exceptions = {}
 if os.path.isfile(EXCEPTION_TABLE):
-    f = open(EXCEPTION_TABLE, 'r', encoding='utf8')
+    f = open(EXCEPTION_TABLE, 'r', encoding=m_encode)
     for line in f:
         line_aux = line.replace('\n','').split('\t')
         exceptions[line_aux[0]] = line_aux[1]
@@ -111,7 +111,7 @@ original_words = set([])
 words = set([])
 cont = 0
 exception_words = 0
-f = open(FINAL_INPUT_FILE, 'r', encoding='utf8')
+f = open(FINAL_INPUT_FILE, 'r', encoding=m_encode)
 for line in f:
     if need_to_clean:
         line = clean_text(line)    
@@ -195,7 +195,7 @@ for line in f:
                             aux_digits = ''
 
                 if needs_isolating and (len(aux_mapping)>0):
-                    with open(MAPPING_FILE_PATH, 'a') as m_f:                        
+                    with open(MAPPING_FILE_PATH, 'a', encoding=m_encode) as m_f:                        
                         m_f.write(aux_mapping+'\t'+word+'\n')
                         needs_isolating = False
                         aux_mapping = ''                        
@@ -219,7 +219,7 @@ print("-> ", len(my_lists), "aux. files to be sent to G2P")
 counter = 0
 for l in my_lists:
     counter = counter + len(l)
-    with open(OUTPUT_FILE_FOLDER+OUTPUT_FILE_NAME+str(counter)+'.txt', 'w') as f:
+    with open(OUTPUT_FILE_FOLDER+OUTPUT_FILE_NAME+str(counter)+'.txt', 'w', encoding=m_encode) as f:
         for word in l:
             f.write(word)
             f.write('\n')
