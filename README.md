@@ -1,24 +1,24 @@
 # lexiconator
-Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of text files using the [G2P](https://webservices.cls.ru.nl/g2pservice/index/) webservice of CLST, Dutch CGN2 (under [CLAM](https://proycon.github.io/LaMachine/) environment and Python3).
+Creates a single file (lexicon format: <word><separator-symbol><phones>) from a list of text files using the [G2P](https://webservices.cls.ru.nl/g2pservice/index/) webservice of CLST, Dutch CGN2 (under [CLAM](https://proycon.github.io/LaMachine/) environment and Python3).
 
 
 
 ## 1. Prepare input data and values of variables
-1. The `utils/preparing_raw_data.py` script will extract all words possible from specific text files. You just need to put as many text files as you want under one folder: `utils/preparing_raw_data.py#RAW_DATA_FOLDER`.
+1. The `utils/preparing_raw_data.py` script will extract all words possible from specific text files. You just need to put as many text files as you want under one folder specified as an argument: `utils/preparing_raw_data.py#RAW_DATA_FOLDER`.
  
 1. The generated file `utils/preparing_raw_data.py#FINAL_INPUT_FILE` in `utils/preparing_raw_data.py#FINAL_INPUT_FOLDER` will be used as input for the next step.
 
 1.  `uber_script.py`:
-*Mandatory*: `WEBSERVICES_USERNAME`, `WEBSERVICES_PASSWORD`, `OPTION`,
-*Optional*: `OUTPUT_FOLDER`, `AUX_FOLDER`, `DICT_FOLDER`, `SUFFIX_OUTPUT_FOLDER`, `RAW_DATA_FOLDER`, `RAW_OUTPUT_FOLDER`
+*Mandatory parameters*: `$WEBSERVICES_USER`, `$WEBSERVICES_PASSWORD`, `$lexi_project_PATH`, `$CLEAN (0-1)`, `$DIACRITICS (0-1)`, `$HEADER_LEXICON`, `$FINAL_INPUT_FILE`, 
+*Optional*: `OPTION`, `OUTPUT_FOLDER`, `AUX_FOLDER`, `DICT_FOLDER`, `SUFFIX_OUTPUT_FOLDER`, `RAW_DATA_FOLDER`, `RAW_OUTPUT_FOLDER`
 
 1.  `local/prepare_lexicon.py`:
-*Mandatory*: `FINAL_INPUT_FILE` (must be the same as `utils/preparing_raw_data.py#FINAL_INPUT_FILE`)
-*Optional*: `EXCEPTION_TABLE`, `PREVIOUS_WORDS_FILE`, `need_to_clean`, `DIGITS_TO_WORDS_FILE_PATH` (.perl file not included in this repo. due to copyright, please contact me to access this file. You could also delete its use in the code).
+*Mandatory parameters*: `$AUX_FOLDER`, `$MAPPING_FILE_PATH`, `$CLEAN`, `$DIACRITICS`, `$FINAL_INPUT_FILE` (must be the same as `utils/preparing_raw_data.py#FINAL_INPUT_FILE`)
+*Optional*: `EXCEPTION_TABLE`, `PREVIOUS_WORDS_FILE`, `DIGITS_TO_WORDS_FILE_PATH` (.perl file not included in this repo. due to copyright, please contact me to access this file. You could also delete its use in the code).
 
 1. `local/join_files.py`:
-*Mandatory*: `HEADER`, `INCLUDE_DISAMBIGUATION_SYMBOLS`
-*Optional*: `FINAL_FOLDER`, `LEXICON_FILE`, `AUX_LEXICON_FILE`, `LOG_FILE`
+*Mandatory parameters*: `DICT_FOLDER`, `FINAL_FOLDER`, `MAPPING_FILE_PATH`, `HEADER`
+*Optional*: `INCLUDE_DISAMBIGUATION_SYMBOLS`, `LEXICON_FILE`, `AUX_LEXICON_FILE`, `LOG_FILE`
 
 
 **Important**: phonetic transcription of numbers are not supported by the current G2P service. You may (a) use their orthographical word representation with a .perl script `local/prepare_lexicon.py#DIGITS_TO_WORDS_FILE_PATH` and `local/prepare_lexicon.py#need_to_clean=True`, (b) do it by yourself or (c) just ignore them.
@@ -34,7 +34,7 @@ Creates a single file (lexicon format: word /tab-symbol/  phones) from a list of
 1. Make sure you have set the values of the *Mandatory* variables of the scripts. Also set `OPTION=1` on `uber_script.py`
 1. (On Ponyland): Log into one of the [servers](https://ponyland.science.ru.nl/doku.php?id=wiki:ponyland:about): `ssh rarity`
 1. Activate your LaMachine: `lm` or `lamachine-lacristianmachine-activate` (replace `lacristianmachine` for the name of your LaMachine).
-1. Run `python3 uber_script.py`
+1. Run `python3 uber_script.py *WEBSERVICES_USERNAME* *WEBSERVICES_PASSWORD* /home/ctejedor/python-scripts/lexiconator 1 1 "<unk><TAB>spn" /home/ctejedor/python-scripts/lexiconator/input/wordlist`
 
 
 ## 3. Results

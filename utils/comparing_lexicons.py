@@ -1,21 +1,26 @@
 #!/usr/bin/env python3
 
 # Compares two lexicon files providing several stats
+# run: python3 comparing_lexicons.py lex1 lex2 1 > out.txt
+# example:
+# lexi_project=/home/ctejedor/python-scripts/lexiconator
+# current_lex=data/local
+# python3 $lexi_project/utils/comparing_lexicons.py $current_lex/dict/lexicon.txt $current_lex/dict_test/lexicon.txt 1 > $current_lex/compare.txt
+#
 # @author Cristian TG
 # @since 2021/04/15
 
-# Please change the value of these variables:
-LEXICON_1 = 'lexicon1.txt'
-LEXICON_2 = 'lexicon2.txt'
-SHOW_DETAILS = True
+import sys
+if (len(sys.argv) < 4):
+    print("You must add three arguments: the first and second lexicon path and if you want to see a full report (1:yes/0:no).")
+    sys.exit(-1)
+LEXICON_1 = sys.argv[1]
+LEXICON_2 = sys.argv[2]
+SHOW_DETAILS = int(sys.argv[3])==1
 
+###############################################################
+###############################################################
 DISAMBIGUATION_SYMBOL = '#'
-
-
-###############################################################
-###############################################################
-#import os
-
 def getLexicon(lexicon, path):
     with open(path) as lexi:
         for line in lexi:

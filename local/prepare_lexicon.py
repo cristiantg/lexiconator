@@ -3,13 +3,11 @@
 import os
 import sys
 
-if (len(sys.argv) < 3):
-    print("You must add two arguments: a folder path for generating auxiliary files and a path for the mapping file")
+if (len(sys.argv) < 6):
+    print("You must add five arguments: a folder path for generating auxiliary files; a path for the mapping file; 0/1 (False/true) for cleaning data: 0/1  (False/true) for leaning diacritics; input/wordlist file path")
     sys.exit(-1)
 
 m_encode = 'utf-8'
-# Words file with one word in each line, to avoid repeating them in the new lexicon file generated
-FINAL_INPUT_FILE = 'input/wordlist'
 #Exception table overruling the output of the g2p. <word><tab><subword1><space><subwordn>. 
 # It could be empty
 EXCEPTION_TABLE = ''
@@ -17,10 +15,12 @@ EXCEPTION_TABLE = ''
 # It could be empty
 PREVIOUS_WORDS_FILE = ''  # words.txt
 # Minimum lentgh of the words of the final lexicon  
-MIN_LENGTH_OUTPUT_WORDS = 2
+MIN_LENGTH_OUTPUT_WORDS = 1
 # Delete diacritics and other symbols
-need_to_clean=True
-delete_diacritics=True
+need_to_clean=sys.argv[3]=='1'
+delete_diacritics=sys.argv[4]=='1'
+# Words file with one word in each line, to avoid repeating them in the new lexicon file generated
+FINAL_INPUT_FILE = sys.argv[5]
 # OPTIONAL
 # Be careful, if you want map down digits you need the map_digits_to_words_v2.perl file
 # Not included in this repo. due to copyright issues.
@@ -41,7 +41,8 @@ SEP_ISOLATED = '###'
 ########################################################################################
 # You can add/remove as many symbols as you want:
 # Do not include the symbols in DELETE_ONLY_BEGIN_END and in REPLACE_SYMBOLS
-DELETE_ONLY_BEGIN_END = ["-", "\'"]
+# if need_to_clean:
+DELETE_ONLY_BEGIN_END = ["-"] ####### You can also add: "\'"
 REPLACE_SYMBOLS = {"\"": "", "\n": "", ";": "", "(": "", ")": "", 
                    ".": "", ":": "", "_": "",
                    "%": "", "•": "", "‘": "", "’": "", "–": "", "[": "", "]": "", 
@@ -127,11 +128,12 @@ for line in f:
             word = word.lower()
         if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word.upper() not in not_include):
             ## 1. Special cases - (first and last char)
-            for be_symbol in DELETE_ONLY_BEGIN_END:
-                if word[0]==be_symbol:
-                    word = word[1:]
-                if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word[-1]==be_symbol):
-                    word = word [:-1]
+            if need_to_clean:
+                for be_symbol in DELETE_ONLY_BEGIN_END:
+                    if word[0] == be_symbol:
+                        word = word[1:]
+                    if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word[-1] == be_symbol):
+                        word = word [:-1]
 
             # 2. Avoiding possible duplicates  
             if word not in original_words:

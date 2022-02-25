@@ -1,19 +1,19 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 
 import shutil
 import glob
 import os
 import sys
 
-if (len(sys.argv) < 4):
-    print("You must add three arguments: a folder path for retrieving the server data, the output folder for the lexicon and a path for the mapping file.")
+if (len(sys.argv) < 5):
+    print("You must add four arguments: a folder path for retrieving the server data, the output folder for the lexicon; a path for the mapping file; and the header file for the lexicon file.")
     sys.exit(-1)
 
 m_encode = 'utf-8'
-# Personalize the first lines of the final lexicon file
-#HEADER = "!SIL\tsil\n<UNK>\tspn\n"
-HEADER = ''
-#"<unk>\tunk\n"
+SEP_SYMBOL = '\t'
+#HEADER = "!SIL\tsil\n<UNK>\tspn\n" # Personalize the first lines of the final lexicon file
+HEADER = sys.argv[4].replace('<TAB>', SEP_SYMBOL)
 # Change this value whether you want or not to include disambiguation symbols (Kaldi)
 INCLUDE_DISAMBIGUATION_SYMBOLS = False
 
@@ -27,7 +27,6 @@ LOG_FILE = FINAL_FOLDER+'log.txt'
 DISAMBIGUATION_SYMBOL = '#'
 DISAMBIG_FILE = FINAL_FOLDER+'disambig.txt'
 DISAMBIG_DEFAULT_INDEX = 0
-SEP_SYMBOL = '\t'
 SEP_PHON_SYMBOL = ' '
 INPUT_EXT = '*.dict'
 # Must be the same as in prepare_lexicon.py
@@ -112,7 +111,7 @@ for m_entry in isolated_words:
 n_disambig_lines = []
 max_disambig_index = DISAMBIG_DEFAULT_INDEX
 with open(LEXICON_FILE, 'w', encoding=m_encode) as w:
-    w.write(HEADER)
+    w.write(HEADER+'\n')
     aux_line = ""
     for m_entry in sorted(lexicon):
         m_pron = lexicon[m_entry][0]

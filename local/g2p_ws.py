@@ -7,6 +7,7 @@ import random
 import sys
 import os
 import time
+from os import path
 
 
 if (len(sys.argv)<5):
@@ -97,8 +98,9 @@ for outputfile in data.output:
 	#Download the remote file
 
     localfilename = os.path.basename(str(outputfile))
-    outputfile.copy(localfilename)
-    os.rename(localfilename, str(sys.argv[4])+localfilename)
+    #outputfile.copy(localfilename)
+    #os.rename(localfilename, str(sys.argv[4])+localfilename)
+    outputfile.copy(str(sys.argv[4])+localfilename)
 
     
 	#..or iterate over its (textual) contents one line at a time:
