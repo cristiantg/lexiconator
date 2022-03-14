@@ -2,8 +2,26 @@
 Creates a single file (lexicon format: <word><separator-symbol><phones>) from a list of text files using the [G2P](https://webservices.cls.ru.nl/g2pservice/index/) webservice of CLST, Dutch CGN2 (under [CLAM](https://proycon.github.io/LaMachine/) environment and Python3).
 
 
+## 1. How to run this project
+1. (On Ponyland): Log into one of the [servers](https://ponyland.science.ru.nl/doku.php?id=wiki:ponyland:about): `ssh rarity`
+1. Activate your LaMachine: `lm` or `lamachine-lacristianmachine-activate` (replace `lacristianmachine` for the name of your LaMachine).
+1. Move to this project's folder: `m_project=/home/ctejedor/python-scripts/lexiconator && cd $m_project`
 
-## 1. Prepare input data and values of variables
+
+**STEP 1: Preparing raw data as input**
+1. Place all your text files into the path: `<path_to_txt_files>`
+1. Run `python3 $m_project/utils/preparing_raw_data.py <path_to_txt_files>`
+
+**STEP 2: Obtaining the lexicon file**
+1. Set `OPTION=1` on `uber_script.py`.
+1. Run `python3 $m_project/uber_script.py <WEBSERVICES_USERNAME> <WEBSERVICES_PASSWORD> $m_project 1 1 "<unk><TAB>spn" $m_project/input/wordlist $m_project/output`
+
+
+## 2. Results
+The final lexicon file will be under the path: `$m_project/output`
+
+
+## 3. Prepare input data and values of variables
 1. The `utils/preparing_raw_data.py` script will extract all words possible from specific text files. You just need to put as many text files as you want under one folder specified as an argument: `utils/preparing_raw_data.py#RAW_DATA_FOLDER`.
  
 1. The generated file `utils/preparing_raw_data.py#FINAL_INPUT_FILE` in `utils/preparing_raw_data.py#FINAL_INPUT_FOLDER` will be used as input for the next step.
@@ -22,23 +40,6 @@ Creates a single file (lexicon format: <word><separator-symbol><phones>) from a 
 
 
 **Important**: phonetic transcription of numbers are not supported by the current G2P service. You may (a) use their orthographical word representation with a .perl script `local/prepare_lexicon.py#DIGITS_TO_WORDS_FILE_PATH` and `local/prepare_lexicon.py#need_to_clean=True`, (b) do it by yourself or (c) just ignore them.
-
-
-
-## 2. How to run this project
-**PART 1: Preparing raw data as input**
-1. Put your text files into the path: `utils/preparing_raw_data.py#RAW_DATA_FOLDER`
-1. Run `python3 utils/preparing_raw_data.py`
-
-**PART 2: Obtaining the lexicon file**
-1. Make sure you have set the values of the *Mandatory* variables of the scripts. Also set `OPTION=1` on `uber_script.py`
-1. (On Ponyland): Log into one of the [servers](https://ponyland.science.ru.nl/doku.php?id=wiki:ponyland:about): `ssh rarity`
-1. Activate your LaMachine: `lm` or `lamachine-lacristianmachine-activate` (replace `lacristianmachine` for the name of your LaMachine).
-1. Run `python3 uber_script.py *WEBSERVICES_USERNAME* *WEBSERVICES_PASSWORD* /home/ctejedor/python-scripts/lexiconator 1 1 "<unk><TAB>spn" /home/ctejedor/python-scripts/lexiconator/input/wordlist`
-
-
-## 3. Results
-The final lexicon file will be under the path set in the variable: `local/join_files.py#FINAL_FOLDER`
 
 
 ## 4. Extra utilities

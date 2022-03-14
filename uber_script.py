@@ -9,7 +9,7 @@
 # uber_script.py, local/prepare_lexicon.py and local/join_files.py
 #
 #
-# There are two options (change the value manyally please):
+# There are two options (change the value manually please):
 # OPTION = 1
 # This script provides a lexicon file with the following sintax
 # <word><tab-symbol><phonetic-transcription> in each line
@@ -37,8 +37,8 @@ import os
 import shutil
 import sys
 
-if (len(sys.argv) < 8):
-    print("You must add seven arguments: username, password; this project abs. path; 0/1 for cleaning data: 0/1 forc leaning diacritics; the header file for the lexicon file; and the input/wordlist file path.")
+if (len(sys.argv) < 9):
+    print("You must add eight arguments: username, password; this project abs. path; 0/1 for cleaning data: 0/1 forc leaning diacritics; the header file for the lexicon file; the input/wordlist file path; the output folder")
     sys.exit(-1)
 WEBSERVICES_USERNAME = sys.argv[1]
 WEBSERVICES_PASSWORD = sys.argv[2]
@@ -47,6 +47,7 @@ need_to_clean = sys.argv[4]
 delete_diacritics = sys.argv[5]
 HEADER_LEXICON = sys.argv[6]
 FINAL_INPUT_FILE = sys.argv[7]
+OUTPUT_FOLDER = sys.argv[8]
 
 # Change this value manually
 OPTION = 1
@@ -73,12 +74,10 @@ RAW_OUTPUT_FOLDER = os.path.join(THIS_PROJECT_PATH, "raw")
 
 
 # ---------------- ANY OPTION ----------------
-# name+/ Autogenerate files in this folder (you should remove them manually after running this script)
-OUTPUT_FOLDER = os.path.join(THIS_PROJECT_PATH,'output/')
 # name+/ Autogenerate files in this folder
-AUX_FOLDER = os.path.join(THIS_PROJECT_PATH,OUTPUT_FOLDER,'aux/')
+AUX_FOLDER = os.path.join(OUTPUT_FOLDER,'aux/')
 # name+/ Autogenerate files in this folder 
-DICT_FOLDER = os.path.join(THIS_PROJECT_PATH,OUTPUT_FOLDER,'dict/')
+DICT_FOLDER = os.path.join(OUTPUT_FOLDER,'dict/')
 
 
 
@@ -86,11 +85,11 @@ DICT_FOLDER = os.path.join(THIS_PROJECT_PATH,OUTPUT_FOLDER,'dict/')
 #########################################################
 def main_loop(m_file, aux_file):
   # name+/ Autogenerate files in this folder
-  FINAL_FOLDER = OUTPUT_FOLDER+m_file+'-final/'
+  FINAL_FOLDER = os.path.join(OUTPUT_FOLDER,m_file+'-final')
   if not os.path.exists(FINAL_FOLDER):
     os.makedirs(FINAL_FOLDER)
   # name+/ Autogenerate files in this folder 
-  MAPPING_FILE_PATH = FINAL_FOLDER+'mapping.txt'
+  MAPPING_FILE_PATH = os.path.join(FINAL_FOLDER,'mapping.txt')
   open(MAPPING_FILE_PATH, 'w').close()
 
 

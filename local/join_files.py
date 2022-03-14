@@ -19,13 +19,13 @@ INCLUDE_DISAMBIGUATION_SYMBOLS = False
 
 MAPPING_FILE_PATH = sys.argv[3]
 FINAL_FOLDER = sys.argv[2]
-AUX_LEXICON_FILE = FINAL_FOLDER+'lexiconordered.pron'
-LEXICON_FILE = FINAL_FOLDER+'lexicon.txt'
-LOG_FILE = FINAL_FOLDER+'log.txt'
+AUX_LEXICON_FILE = os.path.join(FINAL_FOLDER,'lexiconordered.pron')
+LEXICON_FILE = os.path.join(FINAL_FOLDER,'lexicon.txt')
+LOG_FILE =  os.path.join(FINAL_FOLDER,'log.txt')
 # https://kaldi-asr.org/doc/data_prep.html
 # https://kaldi-asr.org/doc/graph.html#graph_disambig
 DISAMBIGUATION_SYMBOL = '#'
-DISAMBIG_FILE = FINAL_FOLDER+'disambig.txt'
+DISAMBIG_FILE = os.path.join(FINAL_FOLDER,'disambig.txt')
 DISAMBIG_DEFAULT_INDEX = 0
 SEP_PHON_SYMBOL = ' '
 INPUT_EXT = '*.dict'
