@@ -9,6 +9,7 @@ raw/*
 compare/*
 raw_input/*
 !raw_input/.gitkeep
+tmp
 
 
 # Byte-compiled / optimized / DLL files

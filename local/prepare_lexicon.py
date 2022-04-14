@@ -36,6 +36,7 @@ OUTPUT_FILE_NAME = 'dict-words'
 MAPPING_FILE_PATH = sys.argv[2]
 # Must be the same as in join_files.py
 SEP_ISOLATED = '###'
+SEP_DIGITS_ISOLATED = '--'
 
 ########################################################################################
 ########################################################################################
@@ -145,7 +146,7 @@ for line in f:
                     for aux_sub in aux_pron.split(' '):
                         if aux_sub.isdecimal():
                             needs_isolating = True
-                            aux_sub = map_digits(aux_sub)
+                            aux_sub = SEP_DIGITS_ISOLATED+map_digits(aux_sub)
                         aux_mapping+=aux_sub
                         words.add(aux_sub+SEP_ISOLATED+str(isolation_subword_count)+SEP_ISOLATED+str(cont)+SEP_ISOLATED)
                         isolation_subword_count+=1
@@ -174,7 +175,7 @@ for line in f:
                             else:
                                 aux_word += aux_char
                                 if len(aux_digits)>0:
-                                    map_word = map_digits(aux_digits)
+                                    map_word = SEP_DIGITS_ISOLATED+map_digits(aux_digits)
                                     iso_word = map_word+SEP_ISOLATED+str(isolation_subword_count)+SEP_ISOLATED+str(cont)+SEP_ISOLATED 
                                     words.add(iso_word)
                                     aux_mapping+=map_word
@@ -189,7 +190,7 @@ for line in f:
                             isolation_subword_count+=1
                             aux_word = ''
                         if len(aux_digits)>0:
-                            map_word = map_digits(aux_digits)
+                            map_word = SEP_DIGITS_ISOLATED+map_digits(aux_digits)
                             iso_word = map_word+SEP_ISOLATED+str(isolation_subword_count)+SEP_ISOLATED+str(cont)+SEP_ISOLATED
                             words.add(iso_word)
                             aux_mapping+=map_word
@@ -226,6 +227,5 @@ for l in my_lists:
             f.write(word)
             f.write('\n')
 
-if need_to_clean:
-    if os.path.isfile(TEMPORAL_FILE):
-        os.remove(TEMPORAL_FILE)
+if os.path.isfile(TEMPORAL_FILE):
+    os.remove(TEMPORAL_FILE)

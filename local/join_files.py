@@ -17,6 +17,7 @@ HEADER = sys.argv[4].replace('<TAB>', SEP_SYMBOL)
 # Change this value whether you want or not to include disambiguation symbols (Kaldi)
 INCLUDE_DISAMBIGUATION_SYMBOLS = False
 
+PRONUN_NOT_FOUND='PRONUNCIATION_NOT_FOUND'
 MAPPING_FILE_PATH = sys.argv[3]
 FINAL_FOLDER = sys.argv[2]
 AUX_LEXICON_FILE = os.path.join(FINAL_FOLDER,'lexiconordered.pron')
@@ -57,22 +58,33 @@ pron_not_found = []
 aux_lexicon_entries = {}
 with open(AUX_LEXICON_FILE, 'r', encoding=m_encode) as r:
     for line in sorted(r):
-        if "PRONUNCIATION_NOT_FOUND" not in line:
-            m_aux = line.split(SEP_SYMBOL)
-            m_word = str(m_aux[0])            
-            m_pron = str(m_aux[1].replace('\n', ''))
+        #if PRONUN_NOT_FOUND not in line:
+        line=line.replace(PRONUN_NOT_FOUND, "")
+        m_aux = line.split(SEP_SYMBOL)
+        m_word = str(m_aux[0])
+        m_pron = str(m_aux[1].replace('\n', ''))
                        
-            aux_word = m_word.split(SEP_ISOLATED)
-            _word_id = aux_word[-2]
-            _subword_id = aux_word[-3]
-            _word_text = aux_word[0]            
-            if _word_id in aux_lexicon_entries:
-                aux_lexicon_entries[_word_id].append((_subword_id, _word_text, m_pron))
-            else:
-                aux_lexicon_entries[_word_id] = [(_subword_id, _word_text, m_pron)]
+        aux_word = m_word.split(SEP_ISOLATED)
+        _word_id = aux_word[-2]
+        _subword_id = aux_word[-3]
+        _word_text = aux_word[0]
+        if _word_id in aux_lexicon_entries:
+            aux_lexicon_entries[_word_id].append((_subword_id, _word_text, m_pron))
         else:
-            pron_not_found.append(line.replace(
-                "PRONUNCIATION_NOT_FOUND", ""))
+            aux_lexicon_entries[_word_id] = [(_subword_id, _word_text, m_pron)]
+        #else:
+        #    pron_not_found.append(line.replace(
+        #        PRONUN_NOT_FOUND, ""))
+
+# 1.1 Check if there are any entries with no phonetic transcription at all:
+temporal_aux = {}
+for ent in aux_lexicon_entries:
+    phon_trans=''
+    for subelem in aux_lexicon_entries[ent]:
+        phon_trans+=subelem[2]
+    if len(phon_trans)!=0:
+        temporal_aux[ent]=aux_lexicon_entries[ent]
+aux_lexicon_entries=temporal_aux
 
 # 2. Create a new list of all words obtained by the G2P (possible duplicates)
 isolated_words = []
@@ -153,7 +165,7 @@ with open(LOG_FILE, 'w', encoding=m_encode) as w:
         for i in n_disambig_lines:
             w.write(i+"\n")
     
-    w.write("\n---- PRONUNCIATION_NOT_FOUND: " +
+    w.write("\n---- "+PRONUN_NOT_FOUND+": " +
                 str(len(pron_not_found))+" entries:\n")
     for i in pron_not_found:
         w.write(i)      
