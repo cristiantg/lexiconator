@@ -7,6 +7,7 @@ if (len(sys.argv) < 6):
     print("You must add five arguments: a folder path for generating auxiliary files; a path for the mapping file; 0/1 (False/true) for cleaning data: 0/1  (False/true) for leaning diacritics; input/wordlist file path")
     sys.exit(-1)
 
+REPLACE_AMPERSAND=' -en- ' # Exactly like this
 m_encode = 'utf-8'
 #Exception table overruling the output of the g2p. <word><tab><subword1><space><subwordn>. 
 # It could be empty
@@ -24,7 +25,7 @@ FINAL_INPUT_FILE = sys.argv[5]
 # OPTIONAL
 # Be careful, if you want map down digits you need the map_digits_to_words_v2.perl file
 # Not included in this repo. due to copyright issues.
-DIGITS_TO_WORDS_FILE_PATH = 'local/map_digits_to_words_v2.perl'
+DIGITS_TO_WORDS_FILE_PATH = '/home/ctejedor/python-scripts/lexiconator/local/map_digits_to_words_v2.perl'
 
 print("\t<clean> mode activated" if need_to_clean else "\t<clean> mode is not activated")
 print("\t<diacritics> will be deleted" if delete_diacritics else "\t<diacritics> will not be deleted")
@@ -44,10 +45,11 @@ SEP_DIGITS_ISOLATED = '--'
 # Do not include the symbols in DELETE_ONLY_BEGIN_END and in REPLACE_SYMBOLS
 # if need_to_clean:
 DELETE_ONLY_BEGIN_END = ["-"] ####### You can also add: "\'"
+# Not include "&", since it will be considered as "en"
 REPLACE_SYMBOLS = {"\"": "", "\n": "", ";": "", "(": "", ")": "", 
                    ".": "", ":": "", "_": "",
                    "%": "", "•": "", "‘": "", "’": "", "–": "", "[": "", "]": "", 
-                   "{": "", "}": "", "<": "", ">": "", "+": "", "=": "", "&": "", 
+                   "{": "", "}": "", "<": "", ">": "", "+": "", "=": "",
                    "§": "", "·": "", "*": "", "?": "", "!": "", "#": "", "~": "",
                    "œ": "", "®": "", "…": "", "^": "", "μ": "", "ß": "", "α": "",
                    "β": "", "γ": "", "©": "", "|": "", "@": "", "$": ""}
@@ -123,6 +125,8 @@ for line in f:
         aux_mapping = ''
         if delete_diacritics:
             word = normalizeText(clean_word(word))
+        # Always:
+        word=word.replace('&',REPLACE_AMPERSAND)
         if cont%2000==0:
             print(cont, end=' ', flush=True)
         if not (word.isupper()):

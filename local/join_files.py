@@ -10,6 +10,7 @@ if (len(sys.argv) < 5):
     print("You must add four arguments: a folder path for retrieving the server data, the output folder for the lexicon; a path for the mapping file; and the header file for the lexicon file.")
     sys.exit(-1)
 
+REPLACE_AMPERSAND=' -en- ' # Exactly like this
 m_encode = 'utf-8'
 SEP_SYMBOL = '\t'
 #HEADER = "!SIL\tsil\n<UNK>\tspn\n" # Personalize the first lines of the final lexicon file
@@ -60,6 +61,7 @@ with open(AUX_LEXICON_FILE, 'r', encoding=m_encode) as r:
     for line in sorted(r):
         #if PRONUN_NOT_FOUND not in line:
         line=line.replace(PRONUN_NOT_FOUND, "")
+        line=line.replace(REPLACE_AMPERSAND,'&')
         m_aux = line.split(SEP_SYMBOL)
         m_word = str(m_aux[0])
         m_pron = str(m_aux[1].replace('\n', ''))
@@ -102,7 +104,7 @@ all_prons = set()
 lexicon = {}
 for m_entry in isolated_words:
     # To avoid duplicated entries
-    m_word = m_entry[0]        
+    m_word = m_entry[0].replace(REPLACE_AMPERSAND,'&')
     m_pron = m_entry[1]              
     m_word_UPPER = m_word.upper()
     if (m_word in all_words) or (m_word_UPPER in all_words_UPPER):
@@ -126,6 +128,7 @@ with open(LEXICON_FILE, 'w', encoding=m_encode) as w:
     w.write(HEADER+'\n')
     aux_line = ""
     for m_entry in sorted(lexicon):
+        m_entry = m_entry.replace(REPLACE_AMPERSAND,'&')
         m_pron = lexicon[m_entry][0]
         aux_line = m_entry+SEP_SYMBOL+m_pron
         disambig_index = pron_duplicates[m_pron]
