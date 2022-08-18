@@ -139,4 +139,4 @@ elif OPTION == 2:
       aux_file = RAW_OUTPUT_FOLDER+os.sep+m_file
       shutil.copy(currentFile, aux_file)
       print("- copied temporal file in "+aux_file)
-      os.system('python3 '+THIS_PROJECT_PATH+'/utils/preparing_raw_data.py '+RAW_OUTPUT_FOLDER)
+      os.system('python3 '+THIS_PROJECT_PATH+'/utils/preparing_raw_data.py '+RAW_OUTPUT_FOLDER+' '+THIS_PROJECT_PATH+'/input')

@@ -6,14 +6,14 @@
 # @since 2021/04/02
 
 import sys
-if (len(sys.argv) < 2):
-    print("You should add one argument: a folder path for obtaining the raw word files.")
+if (len(sys.argv) < 3):
+    print("You should add two arguments: a folder path for obtaining the raw word files and the absolute path of the wordlist folder")
     sys.exit(-1)
 
-# Please change the value of these variables:
 RAW_DATA_FOLDER = sys.argv[1]
-FINAL_INPUT_FOLDER = "input/"
-FINAL_INPUT_FILE = FINAL_INPUT_FOLDER+"wordlist"
+FINAL_INPUT_FOLDER = sys.argv[2] #"input/"
+# Take into account that this value is used in other scripts:
+FINAL_INPUT_FILE = FINAL_INPUT_FOLDER+"/wordlist"
 m_encode = 'utf-8'
 
 

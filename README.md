@@ -9,8 +9,8 @@ Creates a single file (lexicon format: <word><separator-symbol><phones>) from a 
 
 
 **STEP 1: Preparing raw data as input**
-1. Place all your text files into the path: `<path_to_txt_files>`
-1. Run `python3 $m_project/utils/preparing_raw_data.py <path_to_txt_files>`
+1. Place all your text files into the same path: `cp <files> <path_to_txt_files>`
+1. Run `python3 $m_project/utils/preparing_raw_data.py <path_to_txt_files> $m_project/input`
 
 **STEP 2: Obtaining the lexicon file**
 1. Set `OPTION=1` on `uber_script.py`.
@@ -22,7 +22,7 @@ The final lexicon file will be under the path: `$m_project/output`
 
 
 ## 3. Prepare input data and values of variables
-1. The `utils/preparing_raw_data.py` script will extract all words possible from specific text files. You just need to put as many text files as you want under one folder specified as an argument: `utils/preparing_raw_data.py#RAW_DATA_FOLDER`.
+1. The `utils/preparing_raw_data.py` script will extract all words possible from specific text files. You just need to put as many text files as you want under one folder specified as an argument: `utils/preparing_raw_data.py#RAW_DATA_FOLDER` and the output folder `utils/preparing_raw_data.py#FINAL_INPUT_FOLDER`.
  
 1. The generated file `utils/preparing_raw_data.py#FINAL_INPUT_FILE` in `utils/preparing_raw_data.py#FINAL_INPUT_FOLDER` will be used as input for the next step.
 
