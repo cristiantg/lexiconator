@@ -1,17 +1,15 @@
 #!/usr/bin/env python3
 
-import os
-import sys
+import os, sys
 
 if (len(sys.argv) < 6):
     print("You must add five arguments: a folder path for generating auxiliary files; a path for the mapping file; 0/1 (False/true) for cleaning data: 0/1  (False/true) for leaning diacritics; input/wordlist file path")
     sys.exit(-1)
 
-REPLACE_AMPERSAND=' -en- ' # Exactly like this
 m_encode = 'utf-8'
 #Exception table overruling the output of the g2p. <word><tab><subword1><space><subwordn>. 
 # It could be empty
-EXCEPTION_TABLE = ''
+EXCEPTION_TABLE = 'exception_table_homed'
 # Words that will not be included in the final lexicon file.
 # It could be empty
 PREVIOUS_WORDS_FILE = ''  # words.txt
@@ -27,9 +25,9 @@ FINAL_INPUT_FILE = sys.argv[5]
 # Not included in this repo. due to copyright issues.
 DIGITS_TO_WORDS_FILE_PATH = '/home/ctejedor/python-scripts/lexiconator/local/map_digits_to_words_v2.perl'
 
+import word_clean as wc
 print("\t<clean> mode activated" if need_to_clean else "\t<clean> mode is not activated")
 print("\t<diacritics> will be deleted" if delete_diacritics else "\t<diacritics> will not be deleted")
-
 
 
 OUTPUT_FILE_FOLDER = sys.argv[1]
@@ -41,26 +39,6 @@ SEP_DIGITS_ISOLATED = '--'
 
 ########################################################################################
 ########################################################################################
-# You can add/remove as many symbols as you want:
-# Do not include the symbols in DELETE_ONLY_BEGIN_END and in REPLACE_SYMBOLS
-# if need_to_clean:
-DELETE_ONLY_BEGIN_END = ["-"] ####### You can also add: "\'"
-# Not include "&", since it will be considered as "en"
-REPLACE_SYMBOLS = {"\"": "", "\n": "", ";": "", "(": "", ")": "", 
-                   ".": "", ":": "", "_": "",
-                   "%": "", "•": "", "‘": "", "’": "", "–": "", "[": "", "]": "", 
-                   "{": "", "}": "", "<": "", ">": "", "+": "", "=": "",
-                   "§": "", "·": "", "*": "", "?": "", "!": "", "#": "", "~": "",
-                   "œ": "", "®": "", "…": "", "^": "", "μ": "", "ß": "", "α": "",
-                   "β": "", "γ": "", "©": "", "|": "", "@": "", "$": "",
-                   u'\u200b':"", u'\u200c':""}
-REPLACE_WORDS = {",": "", "/": "", "xxx": "", "SIL": ""}
-NORMALIZE_SYMBOLS = {"Ä": "A", "Ë": "E", "Ï": "I", "Ö": "O", "Ü": "U", "Á": "A", "É": "E",
- "Í": "I", "Ó": "O", "Ú": "U", "À": "A", "È": "E", "Ì": "I", "Ò": "O", "Ù": "U", "ä": "a", 
- "ë": "e", "ï": "i", "ö": "o", "ü": "u", "á": "a", "é": "e", "í": "i", "ó": "o", "ú": "u",
- "à": "a", "è": "e", "ì": "i", "ò": "o", "ù": "u", "å": "a", "Å": "A", "ê": "e", "Ê": "E",
- "â":"a", "ã":"a", "î":"i", "û":"u", "ý":"y", "ÿ":"y", "Â":"A", "Ã":"A", "Î":"I", "Û":"U", 
- "Ý":"Y", "Ÿ":"Y"}
 TEMPORAL_FILE = "tmp"
 
 
@@ -72,24 +50,6 @@ def map_digits(digits):
         m_text = str(open(TEMPORAL_FILE, 'r', encoding=m_encode).read()).replace('\n', '')
     return m_text
     
-
-def clean_text(originalText):
-    for symbol in REPLACE_SYMBOLS:
-        originalText = originalText.replace(symbol, REPLACE_SYMBOLS[symbol])
-    return originalText
-
-
-def clean_word(originalWord):
-    for symbol in REPLACE_WORDS:
-        originalWord = originalWord.replace(symbol, REPLACE_WORDS[symbol])
-    return originalWord
-
-
-def normalizeText(originalText):
-    for symbol in NORMALIZE_SYMBOLS:
-        originalText = originalText.replace(symbol, NORMALIZE_SYMBOLS[symbol])
-    return originalText
-    #return ''.join([i for i in originalText if not i.isdigit()])
 
 not_include = set([])
 if os.path.isfile(PREVIOUS_WORDS_FILE):
@@ -119,27 +79,18 @@ exception_words = 0
 f = open(FINAL_INPUT_FILE, 'r', encoding=m_encode)
 for line in f:
     if need_to_clean:
-        line = clean_text(line)    
+        line = wc.clean_text(line)    
     for word in line.split():
         isolation_subword_count = 0
         needs_isolating = False
         aux_mapping = ''
-        if delete_diacritics:
-            word = normalizeText(clean_word(word))
-        # Always:
-        word=word.replace('&',REPLACE_AMPERSAND)
+        word = wc.normalize_text(wc.clean_word(word, ''), delete_diacritics)
         if cont%2000==0:
             print(cont, end=' ', flush=True)
-        if not (word.isupper()):
-            word = word.lower()
         if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word.upper() not in not_include):
             ## 1. Special cases - (first and last char)
             if need_to_clean:
-                for be_symbol in DELETE_ONLY_BEGIN_END:
-                    if word[0] == be_symbol:
-                        word = word[1:]
-                    if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word[-1] == be_symbol):
-                        word = word [:-1]
+                wc.remove_begin_end(word, MIN_LENGTH_OUTPUT_WORDS)
 
             # 2. Avoiding possible duplicates  
             if word not in original_words:
