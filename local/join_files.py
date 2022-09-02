@@ -13,8 +13,9 @@ if (len(sys.argv) < 5):
 REPLACE_AMPERSAND=' -en- ' # Exactly like this
 m_encode = 'utf-8'
 SEP_SYMBOL = '\t'
+END_SYMBOL = '\n'
 #HEADER = "!SIL\tsil\n<UNK>\tspn\n" # Personalize the first lines of the final lexicon file
-HEADER = sys.argv[4].replace('<TAB>', SEP_SYMBOL)
+HEADER = sys.argv[4].replace('<TAB>', SEP_SYMBOL).replace('<END>', END_SYMBOL)
 # Change this value whether you want or not to include disambiguation symbols (Kaldi)
 INCLUDE_DISAMBIGUATION_SYMBOLS = False
 
@@ -107,7 +108,7 @@ for m_entry in isolated_words:
     m_word = m_entry[0].replace(REPLACE_AMPERSAND,'&')
     m_pron = m_entry[1]              
     m_word_UPPER = m_word.upper()
-    if (m_word in all_words) or (m_word_UPPER in all_words_UPPER):
+    if (m_word in all_words) or (not m_word.islower() and (m_word_UPPER in all_words_UPPER)):
         duplicates.append(m_word)
     else:
         all_words.add(m_word)

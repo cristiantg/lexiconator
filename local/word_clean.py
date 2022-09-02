@@ -34,9 +34,14 @@ NORMALIZE_SYMBOLS = {"Ä": "A", "Ë": "E", "Ï": "I", "Ö": "O", "Ü": "U", "Á"
  "Ý":"Y", "Ÿ":"Y"}
 
 # Recommended: 1 step
-def clean_text(text):
-    for symbol in REPLACE_SYMBOLS:
+def clean_text(text, keepUnk=False):
+    TEMP_SUB = 'AABCDEFGHIJKLMNOPQRSTUWXYZZ' if keepUnk else ''      
+    if '<unk>' in text or '<UNK>'in text:
+        text = text.replace('<unk>',TEMP_SUB).replace('<UNK>',TEMP_SUB)        
+    for symbol in REPLACE_SYMBOLS:      
         text = text.replace(symbol, REPLACE_SYMBOLS[symbol])
+    if keepUnk:
+        text = text.replace(TEMP_SUB,'<unk>')
     return text
 
 # Recommended: 2 step
@@ -55,7 +60,7 @@ def normalize_text(text, delDiacritics=True):
     return text.replace('&',REPLACE_AMPERSAND)
 
 # Recommended: 4 step
-def remove_begin_end(word, MIN_LENGTH_OUTPUT_WORDS):
+def remove_begin_end(word, MIN_LENGTH_OUTPUT_WORDS):    
     if len(word)>=MIN_LENGTH_OUTPUT_WORDS:
         for be_symbol in DELETE_ONLY_BEGIN_END:
             if word[0] == be_symbol:

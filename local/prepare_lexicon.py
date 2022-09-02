@@ -7,9 +7,10 @@ if (len(sys.argv) < 6):
     sys.exit(-1)
 
 m_encode = 'utf-8'
-#Exception table overruling the output of the g2p. <word><tab><subword1><space><subwordn>. 
+# Absolute path to an exception table overruling the output of the g2p.
+# Format: <word><tab><subword1><space><subwordn>
 # It could be empty
-EXCEPTION_TABLE = 'exception_table_homed'
+EXCEPTION_TABLE = '/home/ctejedor/python-scripts/lexiconator/input/exception_table_homed'
 # Words that will not be included in the final lexicon file.
 # It could be empty
 PREVIOUS_WORDS_FILE = ''  # words.txt
@@ -69,6 +70,9 @@ if os.path.isfile(EXCEPTION_TABLE):
         exceptions[line_aux[0]] = line_aux[1]
     f.close()
     print("\t---> ", len(exceptions), "total words in the exceptions file")
+else:
+    print("\t---> ", EXCEPTION_TABLE, "not found :(")
+
 
 
 print("\nObtaining/cleaning all words from the source text file...")
@@ -79,7 +83,7 @@ exception_words = 0
 f = open(FINAL_INPUT_FILE, 'r', encoding=m_encode)
 for line in f:
     if need_to_clean:
-        line = wc.clean_text(line)    
+        line = wc.clean_text(line,False)
     for word in line.split():
         isolation_subword_count = 0
         needs_isolating = False
@@ -90,7 +94,7 @@ for line in f:
         if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word.upper() not in not_include):
             ## 1. Special cases - (first and last char)
             if need_to_clean:
-                wc.remove_begin_end(word, MIN_LENGTH_OUTPUT_WORDS)
+                word = wc.remove_begin_end(word, MIN_LENGTH_OUTPUT_WORDS)
 
             # 2. Avoiding possible duplicates  
             if word not in original_words:
