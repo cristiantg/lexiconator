@@ -11,6 +11,10 @@ m_encode = 'utf-8'
 # Format: <word><tab><subword1><space><subwordn>
 # It could be empty
 EXCEPTION_TABLE = '/home/ctejedor/python-scripts/lexiconator/input/exception_table_homed'
+# OPTIONAL
+# Be careful, if you want map down digits you need the map_digits_to_words_v2.perl file
+# Not included in this repo. due to copyright issues.
+DIGITS_TO_WORDS_FILE_PATH = '/home/ctejedor/python-scripts/lexiconator/local/map_digits_to_words_v2.perl'
 # Words that will not be included in the final lexicon file.
 # It could be empty
 PREVIOUS_WORDS_FILE = ''  # words.txt
@@ -21,10 +25,6 @@ need_to_clean=sys.argv[3]=='1'
 delete_diacritics=sys.argv[4]=='1'
 # Words file with one word in each line, to avoid repeating them in the new lexicon file generated
 FINAL_INPUT_FILE = sys.argv[5]
-# OPTIONAL
-# Be careful, if you want map down digits you need the map_digits_to_words_v2.perl file
-# Not included in this repo. due to copyright issues.
-DIGITS_TO_WORDS_FILE_PATH = '/home/ctejedor/python-scripts/lexiconator/local/map_digits_to_words_v2.perl'
 
 import word_clean as wc
 print("\t<clean> mode activated" if need_to_clean else "\t<clean> mode is not activated")

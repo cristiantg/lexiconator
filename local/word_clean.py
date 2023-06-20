@@ -32,6 +32,8 @@ NORMALIZE_SYMBOLS = {"Ä": "A", "Ë": "E", "Ï": "I", "Ö": "O", "Ü": "U", "Á"
  "à": "a", "è": "e", "ì": "i", "ò": "o", "ù": "u", "å": "a", "Å": "A", "ê": "e", "Ê": "E",
  "â":"a", "ã":"a", "î":"i", "û":"u", "ý":"y", "ÿ":"y", "Â":"A", "Ã":"A", "Î":"I", "Û":"U", 
  "Ý":"Y", "Ÿ":"Y"}
+# Common replacements for Dutch transcriptions of exact words (not parts of the word)
+NORMALIZE_SECOND_ROUND={"okee": "ok", "oke": "ok", "okey": "ok", "OKEE": "ok", "OKE": "ok", "OKEY": "ok", "mijn": "mn", "MIJN": "mn", "m'n": "mn", "M'N": "mn", "het":"t", "HET":"t"}
 
 # Recommended: 1 step
 def clean_text(text, keepUnk=False):
@@ -54,9 +56,13 @@ def clean_word(word, xxx=REPLACE_XXX):
 def normalize_text(text, delDiacritics=True):
     if delDiacritics:
         for symbol in NORMALIZE_SYMBOLS:
-            text = text.replace(symbol, NORMALIZE_SYMBOLS[symbol])    
+            text = text.replace(symbol, NORMALIZE_SYMBOLS[symbol])
     if not (text.isupper()):
-        text = text.lower()    
+        text = text.lower()
+    if delDiacritics:   
+        for symbol in NORMALIZE_SECOND_ROUND:
+            if len(symbol)==len(text):
+                text = text.replace(symbol, NORMALIZE_SECOND_ROUND[symbol])
     return text.replace('&',REPLACE_AMPERSAND)
 
 # Recommended: 4 step
