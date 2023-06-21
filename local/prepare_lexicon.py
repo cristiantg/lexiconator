@@ -94,7 +94,7 @@ for line in f:
         if (len(word) >= MIN_LENGTH_OUTPUT_WORDS) and (word.upper() not in not_include):
             ## 1. Special cases - (first and last char)
             if need_to_clean:
-                word = wc.remove_begin_end(word, MIN_LENGTH_OUTPUT_WORDS)
+                word = wc.replace_word(wc.remove_begin_end(word, MIN_LENGTH_OUTPUT_WORDS))
 
             # 2. Avoiding possible duplicates  
             if word not in original_words:
