@@ -34,8 +34,12 @@ NORMALIZE_SYMBOLS = {"Ä": "A", "Ë": "E", "Ï": "I", "Ö": "O", "Ü": "U", "Á"
  "Ý":"Y", "Ÿ":"Y"}
 # Common replacements for Dutch transcriptions of exact words (not parts of the word)
 NORMALIZE_SECOND_ROUND={"okee": "ok", "oke": "ok", "okey": "ok", "OKEE": "ok", "OKE": "ok",
- "OKEY": "ok", "mijn": "mn", "MIJN": "mn", "m'n": "mn", "M'N": "mn", "het":"t", "HET":"t",
-    "'t":"t", "'T":"t", "een": "'n", "Een":"'n", "EEN":"'n"}
+ "OKEY": "ok", "MIJN": "mijn", "mn":"mijn", "m'n": "mijn", "M'N": "mijn", "mjn": "mijn",
+  "'t":"het", "'T":"het", "t":"het", "'n": "een", "Een":"een", "EEN":"een", "z'n":"zijn", "zn":"z'n",
+   "d'r":"daar", "dr":"daar",
+   "'s":"s", "zo'n":"zoon",
+   "'k":"ik","'K":"ik",
+   "uh": ""}
 
 # Recommended: 1 step
 def clean_text(text, keepUnk=False):
